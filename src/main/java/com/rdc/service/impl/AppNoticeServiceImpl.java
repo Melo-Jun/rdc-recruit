@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * (AppNotice)表服务实现类
  *
- * @author makejava
+ * @author myrdc
  * @since 2021-07-25 11:39:29
  */
 @Service("appNoticeService")

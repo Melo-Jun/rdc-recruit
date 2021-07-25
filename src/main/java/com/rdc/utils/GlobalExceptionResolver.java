@@ -6,29 +6,33 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+/**
+ * @Description: 全局异常统一处理
+ * @author: myrdc
+ * @date: 0:01 2021/7/26
+ */
 @ControllerAdvice
-
 public class GlobalExceptionResolver {
 
     @ExceptionHandler(BusinessException.class)
     @ResponseBody
-    public R BusinessExceptionHandler(BusinessException e){
+    public Result BusinessExceptionHandler(BusinessException e){
         e.printStackTrace();
-        return R.of(e.getRc());
+        return Result.newResult(e.getResultCode());
     }
 
     @ExceptionHandler(ParamIllegalException.class)
     @ResponseBody
-    public R ParamIllegalExceptionHandler(ParamIllegalException e){
+    public Result ParamIllegalExceptionHandler(ParamIllegalException e){
         e.printStackTrace();
-        return R.of(e.getRc(),e.getOtherMsg());
+        return Result.newResult(e.getResultCode(),e.getOtherMsg());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public R ExceptionHandler(Exception e){
+    public Result ExceptionHandler(Exception e){
         e.printStackTrace();
-        return R.of(ResultCode.UNKNOWN_ERROR);
+        return Result.newResult(ResultCode.UNKNOWN_ERROR);
     }
 
 }

@@ -1,8 +1,6 @@
 package com.rdc.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rdc.dao.AppNoticeDao;
-import com.rdc.entity.AppNotice;
 import com.rdc.entity.StuUser;
 import com.rdc.dao.StuUserDao;
 import com.rdc.service.StuUserService;
@@ -14,7 +12,7 @@ import java.util.List;
 /**
  * (StuUser)表服务实现类
  *
- * @author makejava
+ * @author myrdc
  * @since 2021-07-25 11:39:30
  */
 @Service("stuUserService")

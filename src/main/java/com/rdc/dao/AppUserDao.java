@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * (AppUser)表数据库访问层
  *
- * @author makejava
+ * @author myrdc
  * @since 2021-07-25 11:39:30
  */
 @Mapper

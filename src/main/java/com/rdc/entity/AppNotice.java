@@ -1,6 +1,5 @@
 package com.rdc.entity;
 
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -8,7 +7,7 @@ import java.io.Serializable;
 /**
  * (AppNotice)实体类
  *
- * @author makejava
+ * @author myrdc
  * @since 2021-07-25 11:39:27
  */
 public class AppNotice implements Serializable {

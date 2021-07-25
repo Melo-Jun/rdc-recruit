@@ -6,9 +6,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 /**
- * @author Jun
- * @description 采用Md5结合Base64对密码进行加密
- * @data 2021-3-27 12:00
+ * @Description: 采用Md5结合Base64对密码进行加密
+ * @author: myrdc
+ * @date: 0:01 2021/7/26
  */
 public class Md5Utils {
 

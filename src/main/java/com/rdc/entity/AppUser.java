@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * (AppUser)实体类
  *
- * @author makejava
+ * @author myrdc
  * @since 2021-07-25 11:39:30
  */
 public class AppUser implements Serializable {

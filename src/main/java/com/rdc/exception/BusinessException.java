@@ -2,17 +2,22 @@ package com.rdc.exception;
 
 import com.rdc.utils.ResultCode;
 
+/**
+ * @Description: 自定义业务异常类
+ * @author: myrdc
+ * @date: 0:01 2021/7/26
+ */
 public class BusinessException extends RuntimeException {
-    private ResultCode rc;
+    private ResultCode resultCode;
     private String messgae;
-    public BusinessException(ResultCode rc){
-        this.rc = rc;
-        this.messgae = rc.getMsg();
+    public BusinessException(ResultCode resultCode){
+        this.resultCode = resultCode;
+        this.messgae = resultCode.getMsg();
     }
-    public ResultCode getRc() {
-        return rc;
+    public ResultCode getResultCode() {
+        return resultCode;
     }
-    public void setRc(ResultCode rc) {
-        this.rc = rc;
+    public void setResultCode(ResultCode resultCode) {
+        this.resultCode = resultCode;
     }
 }

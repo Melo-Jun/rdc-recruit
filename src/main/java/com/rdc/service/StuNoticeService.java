@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * (StuNotice)表服务接口
  *
- * @author makejava
+ * @author myrdc
  * @since 2021-07-25 11:39:30
  */
 @Service

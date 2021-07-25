@@ -8,29 +8,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @Description: 参数校验异常
+ * @author: myrdc
+ * @date: 0:02 2021/7/26
+ */
 public class ParamIllegalException extends RuntimeException {
-    private ResultCode rc;
+    private ResultCode resultCode;
     private String message;
     private Map<String ,String> otherMsg = new HashMap<>(4);
-    public ParamIllegalException(BindingResult br){
-        List<ObjectError> allErrors = br.getAllErrors();
+    public ParamIllegalException(BindingResult bindingResult){
+        List<ObjectError> allErrors = bindingResult.getAllErrors();
         for (ObjectError error : allErrors) {
             otherMsg.put(error.getCode(),error.getDefaultMessage());
         }
-        this.rc = ResultCode.PARAM_ILLEGAL;
-        this.message = rc.getMsg();
+        this.resultCode = ResultCode.PARAM_ILLEGAL;
+        this.message = resultCode.getMsg();
     }
-    public ResultCode getRc() {
-        return rc;
+    public ResultCode getResultCode() {
+        return resultCode;
     }
 
     public Map<String, String> getOtherMsg() {
         return otherMsg;
     }
 
-    public static void thorw(BindingResult br) {
-        if (br.hasErrors()){
-            throw new ParamIllegalException(br);
+    public static void throwException(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new ParamIllegalException(bindingResult);
         }
     }
 }

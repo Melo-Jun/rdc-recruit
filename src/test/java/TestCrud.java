@@ -41,15 +41,12 @@ public class TestCrud {
     public void testConnection() {
         //        新建一个配置文件对象
         Properties properties = new Properties();
-
-//        通过类加载器找到文件路径，读配置文件
+        //        通过类加载器找到文件路径，读配置文件
         InputStream inputStream = this.getClass().getResourceAsStream("jdbc.properties");
-
-//        加载属性文件
+        //        加载属性文件
         try {
             properties.load(inputStream);
-
-//            创建连接池对象
+        //            创建连接池对象
             DataSource dataSource = DruidDataSourceFactory.createDataSource(properties);
             System.out.println(dataSource.getConnection());
         } catch (Exception e) {

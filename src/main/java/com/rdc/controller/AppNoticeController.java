@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 /**
  * (AppNotice)表控制层
  *
- * @author makejava
+ * @author myrdc
  * @since 2021-07-25 11:39:30
  */
 @RestController
