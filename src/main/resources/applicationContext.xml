@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+">
+
+        <!--    Spring的配置文件,主要配置和业务逻辑有关的    -->
+                <!--    数据源,事务等  -->
+
+        <!--    写入资源路径-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+        <!--   组件扫描,不扫Controller注解-->
+    <context:component-scan base-package="com.rdc">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name = "filters" value = "${filters}" />
+        <!-- 最大并发连接数 -->
+        <property name = "maxActive" value = "${maxActive}" />
+        <!-- 初始化连接数量 -->
+        <property name = "initialSize" value = "${initialSize}" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name = "maxWait" value = "${maxWait}" />
+        <!-- 最小空闲连接数 -->
+        <property name = "minIdle" value = "${minIdle}" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name = "timeBetweenEvictionRunsMillis" value
+                ="${timeBetweenEvictionRunsMillis}" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name = "minEvictableIdleTimeMillis" value
+                ="${minEvictableIdleTimeMillis}" />
+        <!-- <property name = "validationQuery" value =
+        "${validationQuery}" /> -->
+        <property name = "testWhileIdle" value = "${testWhileIdle}" />
+        <property name = "testOnBorrow" value = "${testOnBorrow}" />
+        <property name = "testOnReturn" value = "${testOnReturn}" />
+        <property name = "maxOpenPreparedStatements" value
+                ="${maxOpenPreparedStatements}" />
+        <!-- 打开 removeAbandoned 功能 -->
+        <property name = "removeAbandoned" value = "${removeAbandoned}" />
+        <!-- 1800 秒，也就是 30 分钟 -->
+        <property name = "removeAbandonedTimeout" value
+                ="${removeAbandonedTimeout}" />
+        <!-- 关闭 abanded 连接时输出错误日志 -->
+        <property name = "logAbandoned" value = "${logAbandoned}" />
+    </bean>
+
+<!--    &lt;!&ndash;    配置数据源&ndash;&gt;-->
+<!--    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+<!--        <property name="driverClass" value="${driver}"/>-->
+<!--        <property name="jdbcUrl" value="${url}"/>-->
+<!--        <property name="user" value="${username}"/>-->
+<!--        <property name="password" value="${password}"/>-->
+<!--    </bean>-->
+
+        <!--    配置和MyBatis的整合-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--        指定全局配置文件位置-->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+        <!--        指定mapper文件位置-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+
+    <!--        配置扫描器,将mybatis接口的实现加入到ioc容器中-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <!--        扫描所有dao接口的实现,加入到ioc容器中-->
+        <property name="basePackage" value="com.rdc.dao"/>
+    </bean>
+
+    <!-- 配置一个可以进行批量执行的SqlSession -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <constructor-arg name="executorType" value="BATCH"/>
+    </bean>
+
+<!--    事务控制的配置-->
+    <!--    平台管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--    事务增强的配置    -->
+    <tx:advice id="txAdvice">
+      <tx:attributes>
+          <!--配置哪些方法使用什么样的事务,配置事务的传播特性-->
+          <tx:method name="add*" propagation="REQUIRED"/>
+          <tx:method name="delete*" propagation="REQUIRED"/>
+          <tx:method name="update*" propagation="REQUIRED"/>
+          <tx:method name="search*" propagation="SUPPORTS" read-only="true"/>
+          <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+          <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+          <tx:method name="*" propagation="REQUIRED"/>
+      </tx:attributes>
+    </tx:advice>
+
+<!--    aop织入配置-->
+    <aop:config>
+        <aop:pointcut id="txPoint" expression="execution(* com.rdc.service..*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
+    </aop:config>
+
+
+<!--    日志-->
+<!--    &lt;!&ndash; 使用xml配置aop ,引入AOP的命名空间&ndash;&gt;-->
+<!--    <bean id="logInterceptor" class="com.melo.SSM.aop.LogInterceptor"/>-->
+<!--    &lt;!&ndash; 强制使用cglib代理，如果不设置，将默认使用jdk的代理，但是jdk的代理是基于接口的 &ndash;&gt;-->
+<!--    <aop:config proxy-target-class="true" />-->
+<!--    <aop:config>-->
+<!--        &lt;!&ndash;定义切面&ndash;&gt;-->
+<!--        <aop:aspect id="logAspect" ref="logInterceptor">-->
+<!--            &lt;!&ndash;定义切入点&ndash;&gt;-->
+<!--            <aop:pointcut expression="execution(* com.melo.SSM.controller.*.*(..))"  id="logPointCut"/>-->
+<!--            <aop:around method="around" pointcut-ref="logPointCut"/>-->
+<!--        </aop:aspect>-->
+<!--    </aop:config>-->
+
+
+
+</beans>
