@@ -4,10 +4,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rdc.entity.StuUser;
 import com.rdc.dao.StuUserDao;
 import com.rdc.service.StuUserService;
+import com.rdc.utils.HttpRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * (StuUser)表服务实现类
@@ -76,5 +80,30 @@ public class StuUserServiceImpl extends ServiceImpl<StuUserDao, StuUser> impleme
     @Override
     public boolean deleteById(String openId) {
         return this.stuUserDao.deleteById(openId) > 0;
+    }
+
+    @Override
+    public List<HashMap> getOpenId(String code) throws Exception {
+        Properties properties = null;
+        InputStream in = null;
+        try {
+        properties = new Properties();
+        in = this.getClass().getClassLoader().getResourceAsStream("app.properties");
+        // 使用properties对象加载输入
+        properties.load(in);
+        //获取key对应的value值
+        String jscode2session = properties.getProperty("jscode2session");
+        String appid = properties.getProperty("appid");
+        String secret = properties.getProperty("secret");
+
+        String url = jscode2session + "?"
+                + "appid=" + appid
+                + "&secret=" + secret
+                + "&js_code=" + code
+                + "&grant_type=authorization_code";
+            return HttpRequest.httpGet(url);
+        } finally {
+            in.close();
+        }
     }
 }

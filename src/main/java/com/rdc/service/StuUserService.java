@@ -5,6 +5,7 @@ import com.rdc.entity.AppNotice;
 import com.rdc.entity.StuUser;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -57,4 +58,5 @@ public interface StuUserService extends IService<StuUser> {
      */
     boolean deleteById(String openId);
 
+    List<HashMap> getOpenId(String code) throws Exception;
 }

@@ -149,7 +149,14 @@
             <version>1.3</version>
         </dependency>
 
-        <!--日志记录(待定)-->
+        <!--json对象转换 start-->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
+
         <!--文件上传(待定)-->
         <!--验证码?(待定)-->
     </dependencies>
