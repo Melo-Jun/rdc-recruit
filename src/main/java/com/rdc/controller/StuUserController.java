@@ -2,9 +2,13 @@ package com.rdc.controller;
 
 import com.rdc.entity.StuUser;
 import com.rdc.service.StuUserService;
+import com.rdc.utils.Result;
+import com.rdc.utils.ResultCode;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * (StuUser)表控制层
@@ -30,6 +34,12 @@ public class StuUserController {
     @GetMapping("selectOne")
     public StuUser selectOne(String id) {
         return this.stuUserService.queryById(id);
+    }
+
+    @GetMapping("openId")
+    public Result getOpenId(String code) throws Exception {
+        List<HashMap> openId = stuUserService.getOpenId(code);
+        return Result.newResult(ResultCode.SUCCESS,openId);
     }
 
 }
